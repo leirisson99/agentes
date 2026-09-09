@@ -1,0 +1,11 @@
+{
+    "node_version": "20",
+    "graph": {
+        "agent": "./src/graph/factory.ts:graph"
+    },
+    "env": ".env",
+    "dependencies": [
+        "."
+    ],
+    "image_distro": "wolfi"
+}
