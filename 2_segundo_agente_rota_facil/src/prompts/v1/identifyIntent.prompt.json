@@ -1,0 +1,47 @@
+{
+    "task": "Classifique a intenção da mensagem do usuário em uma das categorias abaixo.",
+    "categories": [
+        {
+            "id": "consultar_endereco",
+            "description": "Usuário quer saber o endereço a partir de um CEP"
+        },
+        {
+            "id": "consultar_cotacao",
+            "description": "Usuário quer saber a cotação do dólar"
+        },
+        {
+            "id": "abrir_chamado",
+            "description": "Usuário relata um problema ou pede suporte"
+        },
+        {
+            "id": "unknown",
+            "description": "Não é possível identificar a intenção com confiança"
+        }
+    ],
+    "examples": [
+        {
+            "input": "qual o cep 01310-100",
+            "output": {
+                "command": "consultar_endereco"
+            }
+        },
+        {
+            "input": "quanto tá o dólar hoje",
+            "output": {
+                "command": "consultar_cotacao"
+            }
+        },
+        {
+            "input": "meu sistema caiu, preciso de ajuda",
+            "output": {
+                "command": "abrir_chamado"
+            }
+        },
+        {
+            "input": "oi, bom dia",
+            "output": {
+                "command": "unknown"
+            }
+        }
+    ]
+}
