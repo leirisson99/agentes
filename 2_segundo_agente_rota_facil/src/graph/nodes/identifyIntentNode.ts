@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 import path from "node:path"
 import { ChatOpenAI } from "@langchain/openai"
 import { z } from "zod"
-import { type GraphState } from '../graph'
+import { type GraphState } from '../graph.ts'
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -12,16 +12,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const promptConfig = JSON.parse(
     readFileSync(path.join(
         __dirname,
-        "../..prompt//identifyIntent.prompt.json"
+        "../../prompts/v1/identifyIntent.prompt.json"
     ), "utf-8"))
 
-function buildSystemPrompt(): string {
-    const { task, categories, exemples } = promptConfig
+export function buildSystemPrompt(): string {
+    const { task, categories, examples } = promptConfig
     const categoriesText = categories
         .map((c: any) => `${c.id}: ${c.description}`)
         .join("\n")
 
-    const examplesText = exemples
+    const examplesText = examples
         .map((e: any) => `Entrada: "${e.input}" → ${JSON.stringify(e.output)}`)
         .join('\n')
 
@@ -38,7 +38,7 @@ const baseModel = new ChatOpenAI({
     configuration: { baseURL: "https://openrouter.ai/api/v1" }
 })
 
-const classifier = baseModel.withStructuredOutput(IntentSchema)
+export const classifier = baseModel.withStructuredOutput(IntentSchema)
 
 export async function identifyIntent(state: GraphState): Promise<GraphState> {
     const input = state.messages.at(-1)?.text ?? ""
