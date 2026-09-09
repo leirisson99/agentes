@@ -4,6 +4,7 @@ import path from "node:path"
 import { ChatOpenAI } from "@langchain/openai"
 import { z } from "zod"
 import { type GraphState } from '../graph.ts'
+import { config } from '../../config/index.ts'
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -33,9 +34,9 @@ const IntentSchema = z.object({
 });
 
 const baseModel = new ChatOpenAI({
-    model: "gpt-3.5-turbo",
-    apiKey: process.env.OPENROUTER_API_KEY,
-    configuration: { baseURL: "https://openrouter.ai/api/v1" }
+    model: config.llm.model,
+    apiKey: config.openrouter.apiKey,
+    configuration: { baseURL: config.openrouter.baseURL }
 })
 
 export const classifier = baseModel.withStructuredOutput(IntentSchema)
