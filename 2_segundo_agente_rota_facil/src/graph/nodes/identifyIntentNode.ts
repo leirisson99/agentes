@@ -51,6 +51,7 @@ export async function identifyIntent(state: GraphState): Promise<GraphState> {
 
     return {
         ...state,
+        previousCommand: state.command,
         command: result.command,
         output: input
     }
