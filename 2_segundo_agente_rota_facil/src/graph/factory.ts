@@ -1,6 +1,6 @@
-// import { buildGraph } from "./graph.ts";
+import { buildGraph } from "./graph.ts";
 
-// export const graph = ( ) => {
-//     return buildGraph()
-// }
+export const graph = ( ) => {
+    return buildGraph()
+}
 

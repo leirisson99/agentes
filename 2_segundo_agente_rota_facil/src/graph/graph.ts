@@ -1,7 +1,13 @@
 import { z } from 'zod'
 import { withLangGraph } from '@langchain/langgraph/zod'
-import { MemorySaver, MessagesZodMeta, StateGraph } from "@langchain/langgraph"
+import { END, MemorySaver, MessagesZodMeta, START, StateGraph } from "@langchain/langgraph"
 import { BaseMessage } from '@langchain/core/messages'
+import { identifyIntent } from './nodes/identifyIntentNode.ts'
+import { consultarEnderecoNode } from './nodes/consultarEnderecoNode.ts'
+import { consultarCotacaoNode } from './nodes/consultarCotacaoNode.ts'
+import { abrirChamadoNode } from './nodes/abrirChamadoNode.ts'
+import { chatResponseNode } from './nodes/chatResponseNode.ts'
+import { fallbackNode } from './nodes/fallbackNode.ts'
 
 
 // criando o estado do Grafo
@@ -26,8 +32,36 @@ export type GraphState = z.infer<typeof GraphState>
 
 export function buildGraph() {
     const workFlow = new StateGraph({ stateSchema: GraphState })
+        .addNode("identifyIntent", identifyIntent)
+        .addNode("consultarEndereco", consultarEnderecoNode)
+        .addNode("consultarCotacao", consultarCotacaoNode)
+        .addNode("abrirChamado", abrirChamadoNode)
+        .addNode("fallback", fallbackNode)
+        .addNode("chatResponse", chatResponseNode)
 
-    // nodes da aplicação
+        .addEdge(START, "identifyIntent")
+        .addConditionalEdges(
+            "identifyIntent",
+            (state: GraphState) => {
+                switch (state.command) {
+                    case 'consultar_endereco': return "consultarEndereco"
+                    case "consultar_cotacao": return "consultarCotacao"
+                    case 'abrir_chamado': return "abrirChamado"
+                    default: return 'fallback'
+                }
+            },
+            {
+                consultarEndereco: "consultarEndereco",
+                consultarCotacao: "consultarCotacao",
+                abrirChamado: "abrirChamado",
+                fallback: "fallback"
+            }
+        )
+        .addEdge("consultarEndereco", "chatResponse")
+        .addEdge("consultarCotacao", "chatResponse")
+        .addEdge("abrirChamado", "chatResponse")
+        .addEdge("fallback", "chatResponse")
+        .addEdge("chatResponse", END)
 
 
     // guarda em memória — em produção seria Postgres/Redis
