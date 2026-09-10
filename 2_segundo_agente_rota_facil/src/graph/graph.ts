@@ -9,7 +9,14 @@ const GraphState = z.object({
     messages: withLangGraph(z.custom<BaseMessage[]>(), MessagesZodMeta),
     output: z.string(),
     command: z.enum(['consultar_endereco', 'consultar_cotacao', 'abrir_chamado', 'unknown']),
-    ticketId: z.string().optional()
+    ticketId: z.string().optional(),
+    endereco: z.object({
+    logradouro: z.string(),
+    bairro: z.string(),
+    localidade: z.string(),
+    uf: z.string(),
+}).optional(),
+cotacao: z.number().optional()
 })
 
 
