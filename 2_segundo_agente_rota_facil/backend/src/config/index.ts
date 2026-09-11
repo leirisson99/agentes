@@ -6,4 +6,7 @@ export const config = {
     llm: {
         model: "gpt-3.5-turbo",
     },
+    cors: {
+        allowedOrigin: process.env.FRONTEND_ORIGIN ?? "http://localhost:3001",
+    },
 }

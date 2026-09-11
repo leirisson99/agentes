@@ -10,6 +10,7 @@
     "langgraph:serve": "npx @langchain/langgraph-cli@latest dev"
   },
   "dependencies": {
+    "@fastify/cors": "^11.3.0",
     "@langchain/core": "^1.1.19",
     "@langchain/openai": "^1.5.11",
     "@types/node": "^24.10.13",
